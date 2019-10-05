@@ -4,9 +4,9 @@ import React from 'react'
 class Text extends React.Component {
 
     render() {
-        const switchMode = this.props.switchMode
+        const {switchMode} = this.props
 
-        return <div onClick={() => switchMode()}>
+        return <div onClick={switchMode}>
             ID: {this.props.id}
             Name: {this.props.name}
             User ID: {this.props.userId}
