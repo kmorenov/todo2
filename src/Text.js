@@ -1,21 +1,12 @@
 import React from 'react'
 
-// export  default function Text () {
-class Text extends React.Component {
-
-    render() {
-        const {switchMode} = this.props
+export  default function Text ({item, switchMode}) {
+    const {userId, id, title, completed} = item
 
         return <div onClick={switchMode}>
-            ID: {this.props.id}
-            Name: {this.props.name}
-            User ID: {this.props.userId}
-            Completed: {this.props.completed ? 'true' : 'false'}
-
+            ID: {id}
+            Name: {title}
+            User ID: {userId}
+            Completed: {completed ? 'true' : 'false'}
         </div>
-    }
-
-
 }
-
-export default Text

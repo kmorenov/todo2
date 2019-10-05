@@ -40,8 +40,9 @@ class App extends Component {
     onDelete = (i) => {
         const res = window.confirm(`Delete row ${i + 1}?`)
         if (res) {
-            this.state.todos.splice(i, 1)
-            this.setState({todos: this.state.todos})
+            const newTodos = this.state.todos.slice()
+            newTodos.splice(i, 1)
+            this.setState({todos: newTodos})
         }
     }
 
@@ -77,11 +78,11 @@ class App extends Component {
                         <>
                             <li>
                                 {!this.state.edit ?
-                                    <Text
-                                        name={todo.title}
-                                        id={todo.id}
-                                        userId={todo.userId}
-                                        completed={todo.completed}
+                                    <Text item={todo}
+                                        // name={todo.title}
+                                        // id={todo.id}
+                                        // userId={todo.userId}
+                                        // completed={todo.completed}
                                         switchMode={this.switchMode}
                                     />
                                     :
