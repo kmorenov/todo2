@@ -7,14 +7,16 @@ class App extends Component {
 
     state = {
         todos: [],
-        edit: false,
+        edit: -1,
         inputText: '',
+        search: ''
     }
 
     getTodos = () => {
         return fetch(`https://jsonplaceholder.typicode.com/todos`)
             .then((response) => response.json())
             .then((response) => {
+                console.log(response)
                 this.setState({todos: response})
             })
     }
@@ -25,16 +27,13 @@ class App extends Component {
             return alert('Please enter a text first')
         }
         const todos = this.state.todos.slice();
-        todos[todos.length] =
-            {
-                'id': todos.length,
-                'title': txt,
-                'userId': 11,
-                'completed': false
-            }
-        this.setState({todos})
-        alert(`${txt} added to the bottom of the list`)
-        this.setState({inputText: ''})// document.getElementById('entry').value = ''
+        todos.unshift({
+            'id': todos.length + 1,
+            'title': txt,
+            'userId': 11,
+            'completed': false
+        })
+        this.setState({todos, inputText: ''})
     }
 
     onDelete = (i) => {
@@ -44,10 +43,6 @@ class App extends Component {
             newTodos.splice(i, 1)
             this.setState({todos: newTodos})
         }
-    }
-
-    switchMode = () => {
-        this.setState({edit: true})
     }
 
     onChange = (event, index) => {
@@ -61,38 +56,41 @@ class App extends Component {
     }
 
     handleChange = (event) => {
-       this.setState({inputText: event.target.value})
+        this.setState({inputText: event.target.value})
     }
+
+    handleSearchChange = ({search}) => {
+        this.setState({search})
+    }
+
+/*    filterListBySearchTerm = (todos, search) => (
+        todos.filter(coin => coin.CoinName.toLowerCase().includes(search.toLowerCase()))
+    );*/
 
     render() {
         const {inputText} = this.state
+        const {search} = this.state
         return (
-            <div className="App">
+            <div className="uk-card-media-left uk-cover-container">
+                <input type="text" name="search" id="search" value={search} onChange={this.handleSearchChange}/>
                 To Do List:
                 <input value={inputText} name="entry" id="entry"
-                        onChange={this.handleChange}/>
-
-                <button onClick={this.onAdd}>Add</button>
+                       onChange={this.handleChange}/>
+                <button class="uk-button-primary" onClick={this.onAdd}>Add</button>
                 <ol>
+                    {/*{this.state.todos.filterListBySearchTerm(todos, 'quis ut nam facilis et officia qui') =>*/}
                     {this.state.todos.map((todo, i) =>
                         <>
-                            <li>
-                                {!this.state.edit ?
-                                    <Text item={todo}
-                                        // name={todo.title}
-                                        // id={todo.id}
-                                        // userId={todo.userId}
-                                        // completed={todo.completed}
-                                        switchMode={this.switchMode}
-                                    />
+                            <li onClick={() => {
+                                this.setState({edit: i})
+                            }}>
+                                {this.state.edit != i ?
+                                    <Text item={todo}/>
                                     :
-                                    <Field
-                                        key={todo.id}
-                                        name={todo.title}
-                                        onChange={i => this.onChange(window.event, i)}
-                                        nbr={i}
-                                        value={todo.title}
-                                        onDelete={this.onDelete}
+                                    <Field item={todo}
+                                           onChange={i => this.onChange(window.event, i)}
+                                           index={i}
+                                           onDelete={this.onDelete}
                                     />
                                 }
                             </li>

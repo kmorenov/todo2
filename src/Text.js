@@ -1,12 +1,11 @@
 import React from 'react'
 
-export  default function Text ({item, switchMode}) {
+export default function Text({item}) {
     const {userId, id, title, completed} = item
-
-        return <div onClick={switchMode}>
-            ID: {id}
-            Name: {title}
-            User ID: {userId}
-            Completed: {completed ? 'true' : 'false'}
-        </div>
+    return <div class="uk-card-media-left uk-cover-container">
+        ID: {id}
+        User ID: {userId}
+        Completed: {completed ? 'true' : 'false'}
+        Title: {title}
+    </div>
 }
