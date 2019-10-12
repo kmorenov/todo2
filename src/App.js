@@ -4,7 +4,6 @@ import Field from './Field'
 import Text from './Text'
 
 class App extends Component {
-
     state = {
         todos: [],
         edit: -1,
@@ -16,9 +15,9 @@ class App extends Component {
         return fetch(`https://jsonplaceholder.typicode.com/todos`)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
                 this.setState({todos: response})
             })
+            .catch(err => alert(err))
     }
 
     onAdd = () => {
@@ -48,7 +47,7 @@ class App extends Component {
     onChange = (event, index) => {
         const todos = this.state.todos.slice()
         todos[index].title = event.target.value
-        this.setState({todos: todos})
+        this.setState({todos})
     }
 
     componentDidMount() {
@@ -59,27 +58,36 @@ class App extends Component {
         this.setState({inputText: event.target.value})
     }
 
-    handleSearchChange = ({search}) => {
-        this.setState({search})
+    handleSearchChange = (event) => {
+        this.setState({search: event.target.value})
     }
 
-/*    filterListBySearchTerm = (todos, search) => (
-        todos.filter(coin => coin.CoinName.toLowerCase().includes(search.toLowerCase()))
-    );*/
+    filterTodosBySearch = (todos, search) => {
+        if (search != '') {
+            return todos.filter(todo => todo.title.toLowerCase().includes(search))
+        }
+        return todos
+    }
 
     render() {
-        const {inputText} = this.state
-        const {search} = this.state
+        const {inputText, search, todos} = this.state
+
         return (
             <div className="uk-card-media-left uk-cover-container">
-                <input type="text" name="search" id="search" value={search} onChange={this.handleSearchChange}/>
-                To Do List:
+                Search <input
+                              type="text"
+                              name="search"
+                              id="search"
+                              value={search}
+                              onChange={this.handleSearchChange}/>
+
+                <br/>
                 <input value={inputText} name="entry" id="entry"
                        onChange={this.handleChange}/>
                 <button class="uk-button-primary" onClick={this.onAdd}>Add</button>
                 <ol>
-                    {/*{this.state.todos.filterListBySearchTerm(todos, 'quis ut nam facilis et officia qui') =>*/}
-                    {this.state.todos.map((todo, i) =>
+                    To Do List:
+                    {this.filterTodosBySearch(todos, search).map((todo, i) =>
                         <>
                             <li onClick={() => {
                                 this.setState({edit: i})

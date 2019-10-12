@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+// import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import './uikit.min.css'
+// import './uikit.min.css'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
